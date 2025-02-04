@@ -6,4 +6,4 @@ const errorHandler = (status, message) => {
     return error
 }
 
-module.exports = errorHandler
+module.exports = { errorHandler }

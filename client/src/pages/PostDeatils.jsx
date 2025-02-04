@@ -74,6 +74,7 @@ const PostDeatils = () => {
       setLoading(false);
     }
   };
+  
   return (
     <div className="flex flex-col items-center">
       <Card className="flex max-w-xl p-4 mt-10 mx-10">
@@ -82,7 +83,9 @@ const PostDeatils = () => {
             {lo_post?.title}
           </h5>
         </div>
-        {user?.adminSignup == "Yes" ? (
+        
+        {/* { <> */}
+        {user?.adminSignup == "Yes" && (
           <div className="flex justify-end gap-2">
             <Button
               size="xs"
@@ -92,7 +95,8 @@ const PostDeatils = () => {
               {lo_post?.status == "Approved" ? "Approved" : "Approve"}
             </Button>
           </div>
-        ) : (
+        )} 
+         {user?._id === lo_post?.createdBy &&(
           <div className="flex justify-end gap-4">
             <button
               className="flex items-center gap-2 text-blue-500 hover:text-blue-700"
@@ -108,7 +112,10 @@ const PostDeatils = () => {
               <MdDelete size={16} color="red" />
             </button>
           </div>
+          
         )}
+        {/* </>
+       } */}
 
         <div className="flow-root">
           <ul className="divide-y divide-gray-200 dark:divide-gray-700">

@@ -47,11 +47,41 @@ const getAllPosts = async (req, res, next) => {
     }
     const lo_condition =
       userDetails.adminSignup == "No" ? { status: "Approved" } : {};
-    const lo_condition2 =
-      userDetails.adminSignup == "No" ? { createdBy: id } : {};
-    const posts = await Blog.find({ $and: [lo_condition, lo_condition2] }).sort(
+    // const lo_condition2 =
+    //   userDetails.adminSignup == "No" ? { createdBy: id } : {};
+    const posts = await Blog.find({ $and: [lo_condition] }).sort(
       { createdAt: -1 }
     );
+    return res.status(200).json({ posts });
+  } catch (error) {
+    console.log("err:", error);
+    next(error);
+  }
+};
+
+const getAllApprovedPosts = async (req, res, next) => {
+  try {
+    const id = new mongoose.Types.ObjectId(req.user.id);
+    // console.log('id', id);
+    
+    const userDetails = await User.findById(id).select(
+      "username email adminSignup"
+    );
+    console.log('userDetails', userDetails);
+    const lo_cond = {}
+    if (!userDetails || userDetails.adminSignup == "No") {
+      lo_cond['status'] = 'Approved'
+    } 
+    // if (!userDetails) {
+    //   return next(errorHandler(404, "User not found"));
+    // }
+    // const lo_condition =
+    //   userDetails.adminSignup == "No" ? { status: "Approved" } : {};
+    // const lo_condition2 =
+    //   userDetails.adminSignup == "No" ? { createdBy: id } : {};lo_condition2
+    const posts = await Blog.find(lo_cond).sort({
+      createdAt: -1,
+    });
     return res.status(200).json({ posts });
   } catch (error) {
     console.log("err:", error);
@@ -82,7 +112,9 @@ const updatePostById = async (req, res, next) => {
     blog.author = author;
     blog.status = status;
     await blog.save();
-    return res.status(200).json({ message: "Blog updated successfully", success: true });
+    return res
+      .status(200)
+      .json({ message: "Blog updated successfully", success: true });
   } catch (error) {
     console.log("err:", error);
     next(error);
@@ -118,7 +150,9 @@ const approvePost = async (req, res, next) => {
     }
     blog.status = "Approved";
     const result = await blog.save();
-    return res.status(200).json({ message: "Blog approved successfully", result });
+    return res
+      .status(200)
+      .json({ message: "Blog approved successfully", result });
   } catch (error) {
     console.log("err:", error);
     next(error);
@@ -135,10 +169,20 @@ const deletePostById = async (req, res, next) => {
     if (!blog) {
       return next(errorHandler(404, "Blog not found"));
     }
-    return res.status(200).json({ message: "Blog deleted successfully", success: true });
+    return res
+      .status(200)
+      .json({ message: "Blog deleted successfully", success: true });
   } catch (error) {
     console.log("err:", error);
     next(error);
   }
 };
-module.exports = { createPost, getAllPosts, updatePostById, getPostById, approvePost, deletePostById };
+module.exports = {
+  createPost,
+  getAllPosts,
+  updatePostById,
+  getPostById,
+  approvePost,
+  deletePostById,
+  getAllApprovedPosts,
+};

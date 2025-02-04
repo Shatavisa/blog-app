@@ -6,12 +6,14 @@ const {
   createPost,
   updatePostById,
   deletePostById,
-  approvePost
+  approvePost,
+  getAllApprovedPosts
 } = require("../controllers/post.controller.js");
 const { verifyUser } = require("../utils/verifyUser.js");
 
 router
   .get("/", verifyUser , getAllPosts)
+  // .get("/",verifyUser, getAllApprovedPosts)
   .get("/:id", getPostById)
   .post("/", verifyUser, createPost)
   .put("/:id", verifyUser, updatePostById)

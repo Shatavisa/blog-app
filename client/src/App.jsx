@@ -20,8 +20,8 @@ const App = () => {
     <BrowserRouter>
       <Header />
       <Routes>
-        <Route path="/" element={user == null ? <SignIn /> : <Home />} />
-
+       <Route path="/" element={user == null ? <SignIn /> : <Home />} /> 
+        {/* <Route path="/" element={<Home />} /> */}
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/sign-up" element={<Signup />} />
         <Route>
